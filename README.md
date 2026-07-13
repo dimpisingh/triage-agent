@@ -48,28 +48,6 @@ design decision in this project: it demonstrates you understand that agentic
 systems need a defined failure mode, not just a happy path. An agent that's
 unsure should say so and hand off, not hallucinate a fix.
 
-## Why these design choices (talking points)
-
-- **Hybrid retrieval, not pure vector search**: stack traces and error codes
-  are keyword-exact (BM25 wins), while "why does this happen" reasoning is
-  semantic (embeddings win). `hybrid_search.py` combines both and reranks.
-- **Grounding validation**: every claim in the diagnosis must cite a
-  retrieved chunk ID. If the LLM asserts something with no supporting
-  citation, the grounding check in `nodes.py::validate_grounding` flags it
-  and routes to escalation instead of returning an ungrounded answer.
-- **Small Kafka messages, pointer to full log**: matches the schema you
-  already designed — `rawLogExcerpt` + `logStorageUrl`, not the whole log
-  blob, in the agent's input.
-- **Eval harness with a golden dataset**: `app/eval/golden_dataset.json` has
-  labeled failure→root-cause pairs. `eval_harness.py` runs the agent against
-  all of them and reports root-cause accuracy, citation precision, and
-  escalation rate — the numbers you'd quote in an interview.
-- **Java service stays the system of record**: Kafka producer/consumer
-  (already built) owns ingestion and durability; this Python service is a
-  stateless reasoning layer called over REST. This is a realistic
-  polyglot pattern — Java for infra/durability, Python for the
-  LangGraph/RAG ecosystem, which is where the tooling actually lives.
-
 ## Project layout
 
 ```
@@ -105,18 +83,6 @@ CI failure → Kafka (build-failures) → BuildFailureConsumer
 ```
 
 Key file: `java-consumer/src/main/java/com/dimpi/triage/service/TriageAgentService.java`.
-Two things worth pointing at in an interview:
-
-1. **DTOs mirror the Python Pydantic models field-for-field** (`RetrievedChunk`,
-   `Diagnosis`, `DiagnoseResponse` in `service/dto/`), with `@JsonProperty`
-   mapping the snake_case fields FastAPI returns onto idiomatic Java camelCase
-   — no manual translation layer, no drift risk between the two services'
-   contracts.
-2. **The Java side is fail-open, matching the agent's own escalate pattern.**
-   If the Python service is down or times out, `TriageAgentService` doesn't
-   retry forever and stall the Kafka partition — it logs a forced escalation
-   and moves on, the same downstream action as a low-confidence diagnosis.
-   Reliability of the pipeline doesn't depend on the AI service being up.
 
 Run the whole stack (Kafka + Chroma + Python agent + Java consumer) together:
 
