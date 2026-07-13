@@ -6,9 +6,7 @@ have), retrieve grounded context via hybrid RAG, reason over it with an
 LLM-driven agent graph, and emit a diagnosis with a confidence score and a
 citation trail back to source docs.
 
-This is intentionally scoped to be small enough to run and demo in a
-30-minute interview walkthrough, but architected the way a production system
-would be — each piece (chunking, retrieval, reranking, agent orchestration,
+Each piece (chunking, retrieval, reranking, agent orchestration,
 eval) is a separate, swappable module.
 
 ## Architecture
