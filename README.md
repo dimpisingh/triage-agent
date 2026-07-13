@@ -1,6 +1,6 @@
 # Triage Agent — RAG + Agentic Build Failure Diagnosis
 
-A working reference implementation of an autonomous debugging agent: ingest a
+A working reference implementation of the autonomous debugging agent: ingest a
 build/CI failure event (from Kafka, see the Java producer/consumer you already
 have), retrieve grounded context via hybrid RAG, reason over it with an
 LLM-driven agent graph, and emit a diagnosis with a confidence score and a
