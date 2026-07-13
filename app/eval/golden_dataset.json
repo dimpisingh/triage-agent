@@ -1,0 +1,43 @@
+[
+  {
+    "eventId": "eval-001",
+    "failureType": "DEPENDENCY_CONFLICT",
+    "affectedModule": "retrieval-service",
+    "rawLogExcerpt": "Could not resolve com.fasterxml.jackson.core:jackson-databind:2.15.0: conflicting version 2.13.4 required by spring-boot-starter-web",
+    "expected_root_cause_keywords": ["jackson-databind", "version conflict"],
+    "expected_confidence_min": 0.6
+  },
+  {
+    "eventId": "eval-002",
+    "failureType": "TEST_FAILURE",
+    "affectedModule": "triage-agent",
+    "rawLogExcerpt": "AssertionError: expected confidence >= 0.6 but got 0.42 in test_confidence_router_escalates",
+    "expected_root_cause_keywords": ["confidence", "threshold"],
+    "expected_confidence_min": 0.5
+  },
+  {
+    "eventId": "eval-003",
+    "failureType": "TIMEOUT",
+    "affectedModule": "vector-store",
+    "rawLogExcerpt": "chromadb.errors.ChromaConnectionError: connection to chroma:8000 timed out after 30s",
+    "expected_root_cause_keywords": ["chroma", "connection", "timeout"],
+    "expected_confidence_min": 0.5
+  },
+  {
+    "eventId": "eval-004",
+    "failureType": "COMPILE_ERROR",
+    "affectedModule": "kafka-producer",
+    "rawLogExcerpt": "error: cannot find symbol KafkaTemplate<String,String> kafkaTemplate; symbol not found",
+    "expected_root_cause_keywords": ["import", "KafkaTemplate", "dependency"],
+    "expected_confidence_min": 0.5
+  },
+  {
+    "eventId": "eval-005",
+    "failureType": "DEPLOY_FAILURE",
+    "affectedModule": "unknown-service",
+    "rawLogExcerpt": "ERROR: something went wrong, exit code 137",
+    "expected_root_cause_keywords": [],
+    "expected_confidence_min": 0.0,
+    "expect_escalation": true
+  }
+]
