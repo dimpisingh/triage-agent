@@ -1,7 +1,7 @@
 """
 Eval harness for the triage agent.
 
-Reports the numbers you'd actually quote in an interview:
+Reports the numbers :
   - root-cause accuracy (keyword-match against golden labels — a real
     system would use an LLM-as-judge or human review for this instead)
   - citation precision (are cited chunk_ids actually in retrieved_chunks)
