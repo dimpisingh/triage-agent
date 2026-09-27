@@ -1,7 +1,7 @@
 """
 Node implementations for the triage agent graph. Each node takes and
 returns the shared state dict (LangGraph convention) — this keeps nodes
-independently testable, which is what your eval harness exercises.
+independently testable, which is what my eval harness exercises.
 """
 import json
 import re
